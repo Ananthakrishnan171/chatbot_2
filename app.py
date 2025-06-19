@@ -3,41 +3,50 @@ import pandas as pd
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.linear_model import LogisticRegression
 from fuzzywuzzy import process
+import os
 
 # ===== Load Friendly Chatbot Dataset =====
-chat_df = pd.read_csv("Ananth.csv")
-chat_X = chat_df['input']
-chat_y = chat_df['chatbot']
+if os.path.exists("Ananth.csv"):
+    chat_df = pd.read_csv("Ananth.csv")
+    chat_X = chat_df['input']
+    chat_y = chat_df['chatbot']
 
-chat_vectorizer = TfidfVectorizer()
-chat_X_vec = chat_vectorizer.fit_transform(chat_X)
+    chat_vectorizer = TfidfVectorizer()
+    chat_X_vec = chat_vectorizer.fit_transform(chat_X)
 
-chat_model = LogisticRegression()
-chat_model.fit(chat_X_vec, chat_y)
+    chat_model = LogisticRegression()
+    chat_model.fit(chat_X_vec, chat_y)
 
-chat_dict = dict(zip(chat_df['input'].str.lower(), chat_df['chatbot']))
+    chat_dict = dict(zip(chat_df['input'].str.lower(), chat_df['chatbot']))
+else:
+    st.error("❌ 'Ananth.csv' file not found. Please upload the chatbot dataset.")
+    st.stop()
 
 # ===== Load Sentiment Dataset =====
-emotion_df = pd.read_csv("friendly_emotion_chatbot.csv")
-emo_X = emotion_df['input']
-emo_y = emotion_df['emotion']
+if os.path.exists("friendly_emotion_chatbot.csv"):
+    emotion_df = pd.read_csv("friendly_emotion_chatbot.csv")
+    emo_X = emotion_df['input']
+    emo_y = emotion_df['emotion']
 
-emo_vectorizer = TfidfVectorizer()
-emo_X_vec = emo_vectorizer.fit_transform(emo_X)
+    emo_vectorizer = TfidfVectorizer()
+    emo_X_vec = emo_vectorizer.fit_transform(emo_X)
 
-emo_model = LogisticRegression()
-emo_model.fit(emo_X_vec, emo_y)
+    emo_model = LogisticRegression()
+    emo_model.fit(emo_X_vec, emo_y)
 
-emo_dict = dict(zip(emotion_df['input'].str.lower(), emotion_df['emotion']))
+    emo_dict = dict(zip(emotion_df['input'].str.lower(), emotion_df['emotion']))
+else:
+    st.error("❌ 'friendly_emotion_chatbot.csv' file not found. Please upload the emotion dataset.")
+    st.stop()
 
 # ===== Chatbot Prediction Function =====
 def get_chat_response(user_input):
     user_vec = chat_vectorizer.transform([user_input])
     pred = chat_model.predict(user_vec)[0]
 
-    matches = process.extract(user_input.lower(), chat_dict.keys(), limit=1)
-    if matches and matches[0][1] >= 70:
-        return chat_dict[matches[0][0]]
+    match = process.extractOne(user_input.lower(), chat_dict.keys())
+    if match and match[1] >= 70:
+        return chat_dict[match[0]]
     else:
         return pred
 
@@ -46,16 +55,16 @@ def get_emotion(user_input):
     user_vec = emo_vectorizer.transform([user_input])
     pred = emo_model.predict(user_vec)[0]
 
-    matches = process.extract(user_input.lower(), emo_dict.keys(), limit=1)
-    if matches and matches[0][1] >= 70:
-        return emo_dict[matches[0][0]]
+    match = process.extractOne(user_input.lower(), emo_dict.keys())
+    if match and match[1] >= 70:
+        return emo_dict[match[0]]
     else:
         return pred
 
 # ===== UI Setup =====
 st.set_page_config("Friendly Chatbot", layout="centered")
-st.markdown("<h2 style='text-align: center;'>🤖 Friendly chatbot kuda Sentiment Chatbot</h2>", unsafe_allow_html=True)
-st.markdown("<p style='text-align: center;'>Talk to your virtual friend — I'll also feel your mood 😄😭😤</p>", unsafe_allow_html=True)
+st.markdown("<h2 style='text-align: center;'>🤖 Friendly Chatbot with Mood Detection</h2>", unsafe_allow_html=True)
+st.markdown("<p style='text-align: center;'>Talk to your virtual friend — and see how you feel 😄😭😤</p>", unsafe_allow_html=True)
 
 if "history" not in st.session_state:
     st.session_state.history = []
@@ -89,7 +98,7 @@ if submitted and user_input:
             border-radius:8px;
             font-size:16px;
             margin-bottom:15px;">
-        🔔 Detected Emotion: <b>{emotion.upper()}</b>
+        🔔 <b>Detected Emotion:</b> {emotion.upper()}
         </div>
         """, unsafe_allow_html=True
     )
@@ -114,4 +123,4 @@ for speaker, message in st.session_state.history:
 
 # ===== Footer =====
 st.markdown("---")
-st.markdown("<center><small>Created with ❤️ using Streamlit •  Chat & Mood Aware</small></center>", unsafe_allow_html=True)
+st.markdown("<center><small>Made with ❤️ using Streamlit • Chat + Sentiment</small></center>", unsafe_allow_html=True)
