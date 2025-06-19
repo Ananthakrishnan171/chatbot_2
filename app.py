@@ -18,7 +18,7 @@ chat_model.fit(chat_X_vec, chat_y)
 chat_dict = dict(zip(chat_df['input'].str.lower(), chat_df['chatbot']))
 
 # ===== Load Sentiment Dataset =====
-emotion_df = pd.read_csv("emotion_chat_dataset.csv")
+emotion_df = pd.read_csv("friendly_emotion_chatbot.csv")
 emo_X = emotion_df['input']
 emo_y = emotion_df['emotion']
 
