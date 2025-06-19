@@ -75,8 +75,9 @@ st.markdown("<p style='text-align: center;'>Talk like a friend. I reply & feel y
 
 if "history" not in st.session_state:
     st.session_state.history = []
-if "user_inputs" not in st.session_state:
-    st.session_state.user_inputs = []
+
+if "user_questions" not in st.session_state:
+    st.session_state.user_questions = []
 
 # ===================
 # 🔄 Layout with Sidebar Chat
@@ -85,12 +86,20 @@ col1, col2 = st.columns([1, 3])
 
 with col1:
     st.markdown("<h4>📜 Your Asked Questions</h4>", unsafe_allow_html=True)
-    if st.session_state.user_inputs:
-        st.markdown("<ul style='padding-left: 20px;'>" + "".join(
-            f"<li style='margin-bottom:5px;color:#00E5FF;'>{q}</li>" for q in st.session_state.user_inputs
-        ) + "</ul>", unsafe_allow_html=True)
-    else:
-        st.info("No questions asked yet.")
+    for msg in st.session_state.user_questions:
+        st.markdown(f"""
+            <div style="
+                background-color:#263238;
+                color:#FFFFFF;
+                padding:10px;
+                border-radius:8px;
+                margin:6px 0;
+                font-size:13px;
+                font-family:Segoe UI;
+            ">
+            👉 {msg}
+            </div>
+        """, unsafe_allow_html=True)
 
 with col2:
     with st.form("chat_form", clear_on_submit=True):
@@ -101,9 +110,9 @@ with col2:
         bot_reply = get_chat_response(user_input)
         emotion = get_emotion(user_input)
 
-        st.session_state.user_inputs.append(user_input)
         st.session_state.history.append(("You", user_input))
         st.session_state.history.append(("Bot", bot_reply))
+        st.session_state.user_questions.append(user_input)
 
         emotion_color_map = {
             "happy": "#3949AB",
@@ -113,28 +122,30 @@ with col2:
         }
 
         st.markdown(f"""
-            <div style='
+            <div style="
                 background-color:{emotion_color_map.get(emotion, '#616161')};
                 color:#FFFFFF;
                 padding:12px;
                 border-left:5px solid #fff;
                 border-radius:8px;
                 font-size:16px;
-                margin-top:15px;'>
+                margin-top:15px;
+            ">
             🔔 <b>Detected Emotion:</b> {emotion.upper()}
             </div>
         """, unsafe_allow_html=True)
 
         st.markdown(f"""
-            <div style='
+            <div style="
                 background-color:#43A047;
                 color:#FFFFFF;
                 padding:12px;
                 border-radius:15px;
                 margin-top:15px;
                 font-family:'Segoe UI',sans-serif;
-                font-size:16px;'>
-                <b>Bot:</b> {bot_reply}
+                font-size:16px;
+            ">
+            <b>Bot:</b> {bot_reply}
             </div>
         """, unsafe_allow_html=True)
 
