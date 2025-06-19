@@ -93,45 +93,48 @@ if submitted and user_input:
     st.session_state.history.append(("You", user_input))
     st.session_state.history.append(("Bot", bot_reply))
 
-    color_map = {
-        "happy": "#C8FCEA",
-        "sad": "#FFCEDB",
-        "stress": "#FFF7CC",
-        "emotional": "#DCEEFF"
-    }
+    # ===== Display Emotion Alert =====
+emotion_color_map = {
+    "happy": "#3949AB",      # Indigo
+    "sad": "#D32F2F",        # Red
+    "stress": "#F57C00",     # Orange
+    "emotional": "#7B1FA2",  # Purple
+}
+text_color = "#FFFFFF"
 
-    st.markdown(f"""
-        <div style="background-color:{color_map.get(emotion,'#E2E3E5')};
-                    padding:12px;
-                    border-left:5px solid #999;
-                    border-radius:8px;
-                    font-size:16px;
-                    margin-bottom:15px;">
-        🔔 <b>Detected Emotion:</b> {emotion.upper()}
-        </div>
-    """, unsafe_allow_html=True)
+st.markdown(f"""
+    <div style="
+        background-color:{emotion_color_map.get(emotion, '#616161')};
+        color:{text_color};
+        padding:12px;
+        border-left:5px solid #fff;
+        border-radius:8px;
+        font-size:16px;
+        margin-bottom:15px;">
+    🔔 <b>Detected Emotion:</b> {emotion.upper()}
+    </div>
+""", unsafe_allow_html=True)
 
-# ===================
-# 📜 Chat History
-# ===================
+# ===== Chat History (Dark UI-optimized bubbles) =====
 for speaker, message in st.session_state.history:
     if speaker == "You":
-        bg = "#C8DFF7"  # New input bubble color
-        align = "5% 30%"
+        bg = "#1E88E5"  # Bright blue
     else:
-        bg = "#FFF4D6"  # New output bubble color
-        align = "30% 5%"
+        bg = "#43A047"  # Friendly green
 
     st.markdown(f"""
-        <div style="background-color:{bg};
-                    padding:12px;
-                    border-radius:15px;
-                    margin:10px {align};
-                    font-family:'Segoe UI',sans-serif;
-                    font-size:16px;">
+        <div style="
+            background-color:{bg};
+            color:#FFFFFF;
+            padding:12px;
+            border-radius:15px;
+            margin:10px 5%;
+            font-family:'Segoe UI',sans-serif;
+            font-size:16px;">
             <b>{speaker}:</b> {message}
         </div>
     """, unsafe_allow_html=True)
+
 
 # =============
 # 🔚 Footer
