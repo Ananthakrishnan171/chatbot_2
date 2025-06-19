@@ -32,7 +32,7 @@ if os.path.exists("friendly_emotion_chatbot.csv"):
     emo_X = emotion_df['input']
     emo_y = emotion_df['emotion']
 
-    emo_vectorizer = TfidfVectorizer()
+    emo_vectorizer = TtfidfVectorizer()
     emo_X_vec = emo_vectorizer.fit_transform(emo_X)
 
     emo_model = LogisticRegression()
@@ -69,72 +69,78 @@ def get_emotion(user_input):
 # ===================
 # 🎨 Page UI Layout
 # ===================
-st.set_page_config("Tanglish Chatbot with Mood", layout="centered")
+st.set_page_config("Tanglish Chatbot with Mood", layout="wide")
 st.markdown("<h2 style='text-align: center;'>🤖 Friendly Chatbot + Mood Detector</h2>", unsafe_allow_html=True)
 st.markdown("<p style='text-align: center;'>Talk like a friend. I reply & feel your emotion too 💬❤️</p>", unsafe_allow_html=True)
 
 if "history" not in st.session_state:
     st.session_state.history = []
 
-# ======================
-# 💬 Input Chat Box
-# ======================
-with st.form("chat_form", clear_on_submit=True):
-    user_input = st.text_input("💬 Type your message:", placeholder="Ex: enna panra da...")
-    submitted = st.form_submit_button("Send")
-
-# =======================
-# 🔁 Handle Chat Message
-# =======================
-if submitted and user_input:
-    bot_reply = get_chat_response(user_input)
-    emotion = get_emotion(user_input)
-
-    st.session_state.history.append(("You", user_input))
-    st.session_state.history.append(("Bot", bot_reply))
-
-    # ===== Emotion Alert Box with Better Color =====
-    emotion_color_map = {
-        "happy": "#3949AB",      # Indigo
-        "sad": "#D32F2F",        # Red
-        "stress": "#F57C00",     # Orange
-        "emotional": "#7B1FA2",  # Purple
-    }
-
-    st.markdown(f"""
-        <div style="
-            background-color:{emotion_color_map.get(emotion, '#616161')};
-            color:#FFFFFF;
-            padding:12px;
-            border-left:5px solid #fff;
-            border-radius:8px;
-            font-size:16px;
-            margin-bottom:15px;">
-        🔔 <b>Detected Emotion:</b> {emotion.upper()}
-        </div>
-    """, unsafe_allow_html=True)
-
 # ===================
-# 📜 Chat History with Colors
+# 🔄 Layout with Sidebar Chat
 # ===================
-for speaker, message in st.session_state.history:
-    if speaker == "You":
-        bg = "#1E88E5"  # Bright blue
-    else:
-        bg = "#43A047"  # Friendly green
+col1, col2 = st.columns([1, 3])
 
-    st.markdown(f"""
-        <div style="
-            background-color:{bg};
-            color:#FFFFFF;
-            padding:12px;
-            border-radius:15px;
-            margin:10px 5%;
-            font-family:'Segoe UI',sans-serif;
-            font-size:16px;">
-            <b>{speaker}:</b> {message}
-        </div>
-    """, unsafe_allow_html=True)
+with col1:
+    st.markdown("<h4>🕘 Chat History</h4>", unsafe_allow_html=True)
+    for speaker, message in st.session_state.history:
+        bubble_color = "#1E88E5" if speaker == "You" else "#43A047"
+        st.markdown(f"""
+            <div style="
+                background-color:{bubble_color};
+                color:#FFFFFF;
+                padding:10px;
+                border-radius:10px;
+                margin:5px 0;
+                font-size:14px;">
+                <b>{speaker}:</b> {message}
+            </div>
+        """, unsafe_allow_html=True)
+
+with col2:
+    with st.form("chat_form", clear_on_submit=True):
+        user_input = st.text_input("💬 Type your message:", placeholder="Ex: enna panra da...")
+        submitted = st.form_submit_button("Send")
+
+    if submitted and user_input:
+        bot_reply = get_chat_response(user_input)
+        emotion = get_emotion(user_input)
+
+        st.session_state.history.append(("You", user_input))
+        st.session_state.history.append(("Bot", bot_reply))
+
+        emotion_color_map = {
+            "happy": "#3949AB",
+            "sad": "#D32F2F",
+            "stress": "#F57C00",
+            "emotional": "#7B1FA2",
+        }
+
+        st.markdown(f"""
+            <div style="
+                background-color:{emotion_color_map.get(emotion, '#616161')};
+                color:#FFFFFF;
+                padding:12px;
+                border-left:5px solid #fff;
+                border-radius:8px;
+                font-size:16px;
+                margin-top:15px;">
+            🔔 <b>Detected Emotion:</b> {emotion.upper()}
+            </div>
+        """, unsafe_allow_html=True)
+
+        st.markdown(f"""
+            <div style="
+                background-color:#43A047;
+                color:#FFFFFF;
+                padding:12px;
+                border-radius:15px;
+                margin-top:15px;
+                font-family:'Segoe UI',sans-serif;
+                font-size:16px;">
+                <b>Bot:</b> {bot_reply}
+            </div>
+        """, unsafe_allow_html=True)
 
 # =============
 # 🔚 Footer
