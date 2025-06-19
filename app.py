@@ -75,6 +75,8 @@ st.markdown("<p style='text-align: center;'>Talk like a friend. I reply & feel y
 
 if "history" not in st.session_state:
     st.session_state.history = []
+if "user_inputs" not in st.session_state:
+    st.session_state.user_inputs = []
 
 # ===================
 # 🔄 Layout with Sidebar Chat
@@ -82,26 +84,13 @@ if "history" not in st.session_state:
 col1, col2 = st.columns([1, 3])
 
 with col1:
-    st.markdown("<h4>🕘 Chat History</h4>", unsafe_allow_html=True)
-    chat_history_box = ""
-    for speaker, message in st.session_state.history:
-        bubble_color = "#1E88E5" if speaker == "You" else "#43A047"
-        chat_history_box += f"""
-            <div style='
-                background-color:{bubble_color};
-                color:#FFFFFF;
-                padding:10px;
-                border-radius:10px;
-                margin:5px 0;
-                font-size:14px;'>
-                <b>{speaker}:</b> {message}
-            </div>
-        """
-    st.markdown(f"""
-        <div style='max-height:500px;overflow-y:auto;padding-right:10px;'>
-            {chat_history_box}
-        </div>
-    """, unsafe_allow_html=True)
+    st.markdown("<h4>📜 Your Asked Questions</h4>", unsafe_allow_html=True)
+    if st.session_state.user_inputs:
+        st.markdown("<ul style='padding-left: 20px;'>" + "".join(
+            f"<li style='margin-bottom:5px;color:#00E5FF;'>{q}</li>" for q in st.session_state.user_inputs
+        ) + "</ul>", unsafe_allow_html=True)
+    else:
+        st.info("No questions asked yet.")
 
 with col2:
     with st.form("chat_form", clear_on_submit=True):
@@ -112,6 +101,7 @@ with col2:
         bot_reply = get_chat_response(user_input)
         emotion = get_emotion(user_input)
 
+        st.session_state.user_inputs.append(user_input)
         st.session_state.history.append(("You", user_input))
         st.session_state.history.append(("Bot", bot_reply))
 
