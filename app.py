@@ -94,10 +94,10 @@ if submitted and user_input:
     st.session_state.history.append(("Bot", bot_reply))
 
     color_map = {
-        "happy": "#D4EDDA",
-        "sad": "#F8D7DA",
-        "stress": "#FFF3CD",
-        "emotional": "#D1ECF1"
+        "happy": "#C8FCEA",
+        "sad": "#FFCEDB",
+        "stress": "#FFF7CC",
+        "emotional": "#DCEEFF"
     }
 
     st.markdown(f"""
@@ -115,8 +115,13 @@ if submitted and user_input:
 # 📜 Chat History
 # ===================
 for speaker, message in st.session_state.history:
-    bg = "#DCF8C6" if speaker == "You" else "#F1F0F0"
-    align = "5% 30%" if speaker == "You" else "30% 5%"
+    if speaker == "You":
+        bg = "#C8DFF7"  # New input bubble color
+        align = "5% 30%"
+    else:
+        bg = "#FFF4D6"  # New output bubble color
+        align = "30% 5%"
+
     st.markdown(f"""
         <div style="background-color:{bg};
                     padding:12px;
