@@ -5,7 +5,9 @@ from sklearn.linear_model import LogisticRegression
 from fuzzywuzzy import process
 import os
 
-# ===== Load Friendly Chatbot Dataset =====
+# ==============================
+# 🧠 Load & Train Chatbot Model
+# ==============================
 if os.path.exists("Ananth.csv"):
     chat_df = pd.read_csv("Ananth.csv")
     chat_X = chat_df['input']
@@ -22,7 +24,9 @@ else:
     st.error("❌ 'Ananth.csv' file not found. Please upload the chatbot dataset.")
     st.stop()
 
-# ===== Load Sentiment Dataset =====
+# ===============================
+# 🧠 Load & Train Sentiment Model
+# ===============================
 if os.path.exists("friendly_emotion_chatbot.csv"):
     emotion_df = pd.read_csv("friendly_emotion_chatbot.csv")
     emo_X = emotion_df['input']
@@ -39,7 +43,9 @@ else:
     st.error("❌ 'friendly_emotion_chatbot.csv' file not found. Please upload the emotion dataset.")
     st.stop()
 
-# ===== Chatbot Prediction Function =====
+# =========================
+# 🤖 Prediction Functions
+# =========================
 def get_chat_response(user_input):
     user_vec = chat_vectorizer.transform([user_input])
     pred = chat_model.predict(user_vec)[0]
@@ -50,7 +56,6 @@ def get_chat_response(user_input):
     else:
         return pred
 
-# ===== Emotion Detection Function =====
 def get_emotion(user_input):
     user_vec = emo_vectorizer.transform([user_input])
     pred = emo_model.predict(user_vec)[0]
@@ -61,20 +66,26 @@ def get_emotion(user_input):
     else:
         return pred
 
-# ===== UI Setup =====
-st.set_page_config("Friendly Chatbot", layout="centered")
-st.markdown("<h2 style='text-align: center;'>🤖 Friendly Chatbot with Mood Detection</h2>", unsafe_allow_html=True)
-st.markdown("<p style='text-align: center;'>Talk to your virtual friend — and see how you feel 😄😭😤</p>", unsafe_allow_html=True)
+# ===================
+# 🎨 Page UI Layout
+# ===================
+st.set_page_config("Tanglish Chatbot with Mood", layout="centered")
+st.markdown("<h2 style='text-align: center;'>🤖 Friendly Chatbot + Mood Detector</h2>", unsafe_allow_html=True)
+st.markdown("<p style='text-align: center;'>Talk like a friend. I reply & feel your emotion too 💬❤️</p>", unsafe_allow_html=True)
 
 if "history" not in st.session_state:
     st.session_state.history = []
 
-# ===== Input Form =====
+# ======================
+# 💬 Input Chat Box
+# ======================
 with st.form("chat_form", clear_on_submit=True):
-    user_input = st.text_input("💬 Type your message:", placeholder="Ex: hi da, enna panra...")
+    user_input = st.text_input("💬 Type your message:", placeholder="Ex: enna panra da...")
     submitted = st.form_submit_button("Send")
 
-# ===== Response + Emotion Alert =====
+# =======================
+# 🔁 Handle Chat Message
+# =======================
 if submitted and user_input:
     bot_reply = get_chat_response(user_input)
     emotion = get_emotion(user_input)
@@ -82,45 +93,43 @@ if submitted and user_input:
     st.session_state.history.append(("You", user_input))
     st.session_state.history.append(("Bot", bot_reply))
 
-    # ===== Alert Box =====
     color_map = {
         "happy": "#D4EDDA",
         "sad": "#F8D7DA",
         "stress": "#FFF3CD",
         "emotional": "#D1ECF1"
     }
-    st.markdown(
-        f"""
-        <div style="
-            background-color:{color_map.get(emotion,'#E2E3E5')};
-            padding:12px;
-            border-left:5px solid #999;
-            border-radius:8px;
-            font-size:16px;
-            margin-bottom:15px;">
+
+    st.markdown(f"""
+        <div style="background-color:{color_map.get(emotion,'#E2E3E5')};
+                    padding:12px;
+                    border-left:5px solid #999;
+                    border-radius:8px;
+                    font-size:16px;
+                    margin-bottom:15px;">
         🔔 <b>Detected Emotion:</b> {emotion.upper()}
         </div>
-        """, unsafe_allow_html=True
-    )
+    """, unsafe_allow_html=True)
 
-# ===== Chat History =====
+# ===================
+# 📜 Chat History
+# ===================
 for speaker, message in st.session_state.history:
     bg = "#DCF8C6" if speaker == "You" else "#F1F0F0"
     align = "5% 30%" if speaker == "You" else "30% 5%"
-    st.markdown(
-        f"""
-        <div style="
-            background-color:{bg};
-            padding:12px;
-            border-radius:15px;
-            margin:10px {align};
-            font-family:'Segoe UI',sans-serif;
-            font-size:16px;">
+    st.markdown(f"""
+        <div style="background-color:{bg};
+                    padding:12px;
+                    border-radius:15px;
+                    margin:10px {align};
+                    font-family:'Segoe UI',sans-serif;
+                    font-size:16px;">
             <b>{speaker}:</b> {message}
         </div>
-        """, unsafe_allow_html=True
-    )
+    """, unsafe_allow_html=True)
 
-# ===== Footer =====
+# =============
+# 🔚 Footer
+# =============
 st.markdown("---")
-st.markdown("<center><small>Made with ❤️ using Streamlit • Chat + Sentiment</small></center>", unsafe_allow_html=True)
+st.markdown("<center><small>Made with ❤️ using Streamlit • Chat & Mood Aware</small></center>", unsafe_allow_html=True)
