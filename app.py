@@ -93,29 +93,30 @@ if submitted and user_input:
     st.session_state.history.append(("You", user_input))
     st.session_state.history.append(("Bot", bot_reply))
 
-    # ===== Display Emotion Alert =====
-emotion_color_map = {
-    "happy": "#3949AB",      # Indigo
-    "sad": "#D32F2F",        # Red
-    "stress": "#F57C00",     # Orange
-    "emotional": "#7B1FA2",  # Purple
-}
-text_color = "#FFFFFF"
+    # ===== Emotion Alert Box with Better Color =====
+    emotion_color_map = {
+        "happy": "#3949AB",      # Indigo
+        "sad": "#D32F2F",        # Red
+        "stress": "#F57C00",     # Orange
+        "emotional": "#7B1FA2",  # Purple
+    }
 
-st.markdown(f"""
-    <div style="
-        background-color:{emotion_color_map.get(emotion, '#616161')};
-        color:{text_color};
-        padding:12px;
-        border-left:5px solid #fff;
-        border-radius:8px;
-        font-size:16px;
-        margin-bottom:15px;">
-    🔔 <b>Detected Emotion:</b> {emotion.upper()}
-    </div>
-""", unsafe_allow_html=True)
+    st.markdown(f"""
+        <div style="
+            background-color:{emotion_color_map.get(emotion, '#616161')};
+            color:#FFFFFF;
+            padding:12px;
+            border-left:5px solid #fff;
+            border-radius:8px;
+            font-size:16px;
+            margin-bottom:15px;">
+        🔔 <b>Detected Emotion:</b> {emotion.upper()}
+        </div>
+    """, unsafe_allow_html=True)
 
-# ===== Chat History (Dark UI-optimized bubbles) =====
+# ===================
+# 📜 Chat History with Colors
+# ===================
 for speaker, message in st.session_state.history:
     if speaker == "You":
         bg = "#1E88E5"  # Bright blue
@@ -134,7 +135,6 @@ for speaker, message in st.session_state.history:
             <b>{speaker}:</b> {message}
         </div>
     """, unsafe_allow_html=True)
-
 
 # =============
 # 🔚 Footer
