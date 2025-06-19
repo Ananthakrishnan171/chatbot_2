@@ -88,4 +88,68 @@ with col1:
         bubble_color = "#1E88E5" if speaker == "You" else "#43A047"
         chat_history_box += f"""
             <div style='
-                ba
+                background-color:{bubble_color};
+                color:#FFFFFF;
+                padding:10px;
+                border-radius:10px;
+                margin:5px 0;
+                font-size:14px;'>
+                <b>{speaker}:</b> {message}
+            </div>
+        """
+    st.markdown(f"""
+        <div style='max-height:500px;overflow-y:auto;padding-right:10px;'>
+            {chat_history_box}
+        </div>
+    """, unsafe_allow_html=True)
+
+with col2:
+    with st.form("chat_form", clear_on_submit=True):
+        user_input = st.text_input("💬 Type your message:", placeholder="Ex: enna panra da...")
+        submitted = st.form_submit_button("Send")
+
+    if submitted and user_input:
+        bot_reply = get_chat_response(user_input)
+        emotion = get_emotion(user_input)
+
+        st.session_state.history.append(("You", user_input))
+        st.session_state.history.append(("Bot", bot_reply))
+
+        emotion_color_map = {
+            "happy": "#3949AB",
+            "sad": "#D32F2F",
+            "stress": "#F57C00",
+            "emotional": "#7B1FA2",
+        }
+
+        st.markdown(f"""
+            <div style='
+                background-color:{emotion_color_map.get(emotion, '#616161')};
+                color:#FFFFFF;
+                padding:12px;
+                border-left:5px solid #fff;
+                border-radius:8px;
+                font-size:16px;
+                margin-top:15px;'>
+            🔔 <b>Detected Emotion:</b> {emotion.upper()}
+            </div>
+        """, unsafe_allow_html=True)
+
+        st.markdown(f"""
+            <div style='
+                background-color:#43A047;
+                color:#FFFFFF;
+                padding:12px;
+                border-radius:15px;
+                margin-top:15px;
+                font-family:'Segoe UI',sans-serif;
+                font-size:16px;'>
+                <b>Bot:</b> {bot_reply}
+            </div>
+        """, unsafe_allow_html=True)
+
+# =============
+# 🔚 Footer
+# =============
+st.markdown("---")
+st.markdown("<center><small>Made with ❤️ using Streamlit • Chat & Mood Aware</small></center>", unsafe_allow_html=True)
