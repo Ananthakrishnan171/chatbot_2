@@ -145,12 +145,12 @@ emotion_color_map = {
 
 # 🎧 Spotify playlist embed links
 spotify_embed_links = {
-    "happy": "https://open.spotify.com/embed/track/3mkPWelCxRQIebt50HB6iH",
-    "sad": "https://open.spotify.com/embed/playlist/37i9dQZF1DWVrtsSlLKzro",
-    "stress": "https://open.spotify.com/embed/track/2uOBQMz765cr8gnLwPPMv1",
+    "happy": "https://open.spotify.com/embed/playlist/2P4Wmt03IQs4DTXVvncReg",
+    "sad": "https://open.spotify.com/embed/playlist/0AyOLKzLZZmlliok7bu1mp",
+    "stress": "https://open.spotify.com/embed/playlist/1YQBOoZJHFJzHx2Pm6sd4w",
     "depression": "https://open.spotify.com/embed/playlist/4GX1yWidUcdCCuIJZSX4Rc",
-    "love": "https://open.spotify.com/embed/playlist/37i9dQZF1DWYNSm3Z3MxiM",
-    "angry": "https://open.spotify.com/track/3cC8pKidSDuKF6rAkRNpJT",
+    "love": "https://open.spotify.com/embed/playlist/6qEZQ1OXaYJaCJHeSHVxO7",
+    "angry": "https://open.spotify.com/embed/playlist/2Lnt48sabnkqVZqyFvpbq9",
     "emotional": "https://open.spotify.com/embed/track/2Osew72vzCf361dtOEF7bB"
 }
 
