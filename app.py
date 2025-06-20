@@ -134,7 +134,7 @@ spotify_embed_links = {
     "depression": "https://open.spotify.com/embed/playlist/37i9dQZF1DX4sWSpwq3LiO",
     "love": "https://open.spotify.com/embed/playlist/37i9dQZF1DWYNSm3Z3MxiM",
     "angry": "https://open.spotify.com/embed/playlist/37i9dQZF1DX1tyCD9QhIWF",
-    "emotional": "https://open.spotify.com/embed/playlist/37i9dQZF1DX7gIoKXt0gmx"
+    "emotional": "https://open.spotify.com/embed/track/2Osew72vzCf361dtOEF7bB"
 }
 
 # Layout
