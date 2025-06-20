@@ -44,7 +44,7 @@ else:
     st.stop()
 
 # ========================
-# 🤖 Prediction Functions
+# 🧠 Prediction Functions
 # ========================
 def get_chat_response(user_input):
     user_vec = chat_vectorizer.transform([user_input])
@@ -161,6 +161,22 @@ with col2:
                 <b>Bot:</b> {bot_reply}
             </div>
         """, unsafe_allow_html=True)
+
+        # 🎵 Spotify Mapping & Embed
+        spotify_embed_map = {
+            "happy": "https://open.spotify.com/embed/playlist/37i9dQZF1DXdPec7aLTmlC",
+            "sad": "https://open.spotify.com/embed/playlist/37i9dQZF1DX7qK8ma5wgG1",
+            "stress": "https://open.spotify.com/embed/playlist/37i9dQZF1DX3rxVfibe1L0",
+            "emotional": "https://open.spotify.com/embed/playlist/37i9dQZF1DX3YSRoSdA634",
+            "angry": "https://open.spotify.com/embed/playlist/37i9dQZF1DWY5LFcRXkCks",
+            "love": "https://open.spotify.com/embed/playlist/37i9dQZF1DX50QitC6Oqtn",
+            "depression": "https://open.spotify.com/embed/playlist/37i9dQZF1DWVrtsSlLKzro"
+        }
+
+        spotify_url = spotify_embed_map.get(emotion.lower())
+        if spotify_url:
+            st.markdown("<h5>🎵 Here's a song for your mood:</h5>", unsafe_allow_html=True)
+            st.components.v1.iframe(spotify_url, height=80)
 
 # =================
 # 🔚 Footer
