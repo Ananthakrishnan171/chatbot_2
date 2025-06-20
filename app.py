@@ -8,44 +8,52 @@ import os
 # ============================
 # ⚙️ Configs
 # ============================
-MATCH_THRESHOLD = 60  # Fuzzy match threshold (e.g., 60 means 60% similarity)
+MATCH_THRESHOLD = 60  # Match score threshold (0-100)
 
 # ============================
 # 🧠 Load & Train Chatbot Model
 # ============================
 if os.path.exists("Ananth.csv"):
-    chat_df = pd.read_csv("Ananth.csv")
-    chat_X = chat_df['input']
-    chat_y = chat_df['chatbot']
+    try:
+        chat_df = pd.read_csv("Ananth.csv", on_bad_lines='skip')
+        chat_X = chat_df['input']
+        chat_y = chat_df['chatbot']
 
-    chat_vectorizer = TfidfVectorizer()
-    chat_X_vec = chat_vectorizer.fit_transform(chat_X)
+        chat_vectorizer = TfidfVectorizer()
+        chat_X_vec = chat_vectorizer.fit_transform(chat_X)
 
-    chat_model = LogisticRegression()
-    chat_model.fit(chat_X_vec, chat_y)
+        chat_model = LogisticRegression()
+        chat_model.fit(chat_X_vec, chat_y)
 
-    chat_dict = dict(zip(chat_df['input'].str.lower(), chat_df['chatbot']))
+        chat_dict = dict(zip(chat_df['input'].str.lower(), chat_df['chatbot']))
+    except Exception as e:
+        st.error(f"❌ Error loading 'Ananth.csv': {e}")
+        st.stop()
 else:
-    st.error("❌ 'Ananth.csv' file not found. Please upload the chatbot dataset.")
+    st.error("❌ 'Ananth.csv' file not found.")
     st.stop()
 
 # ===============================
 # 🧠 Load & Train Sentiment Model
 # ===============================
 if os.path.exists("friendly_emotion_chatbot.csv"):
-    emotion_df = pd.read_csv("friendly_emotion_chatbot.csv")
-    emo_X = emotion_df['input']
-    emo_y = emotion_df['emotion']
+    try:
+        emotion_df = pd.read_csv("friendly_emotion_chatbot.csv", on_bad_lines='skip')
+        emo_X = emotion_df['input']
+        emo_y = emotion_df['emotion']
 
-    emo_vectorizer = TfidfVectorizer()
-    emo_X_vec = emo_vectorizer.fit_transform(emo_X)
+        emo_vectorizer = TfidfVectorizer()
+        emo_X_vec = emo_vectorizer.fit_transform(emo_X)
 
-    emo_model = LogisticRegression()
-    emo_model.fit(emo_X_vec, emo_y)
+        emo_model = LogisticRegression()
+        emo_model.fit(emo_X_vec, emo_y)
 
-    emo_dict = dict(zip(emotion_df['input'].str.lower(), emotion_df['emotion']))
+        emo_dict = dict(zip(emotion_df['input'].str.lower(), emotion_df['emotion']))
+    except Exception as e:
+        st.error(f"❌ Error loading 'friendly_emotion_chatbot.csv': {e}")
+        st.stop()
 else:
-    st.error("❌ 'friendly_emotion_chatbot.csv' file not found. Please upload the emotion dataset.")
+    st.error("❌ 'friendly_emotion_chatbot.csv' file not found.")
     st.stop()
 
 # ========================
