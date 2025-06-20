@@ -1,4 +1,4 @@
-import streamlit as st
+""import streamlit as st
 import pandas as pd
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.linear_model import LogisticRegression
@@ -68,17 +68,52 @@ def get_emotion(user_input):
 # 🎨 Page UI Layout
 # ===================
 st.set_page_config("Chatbot", layout="wide")
-st.markdown("<h2 style='text-align: center;'>🤖 Friendly Chatbot & Sentiment Detector</h2>", unsafe_allow_html=True)
-st.markdown("<p style='text-align: center;'>Talk like a friend. I reply & feel your emotion too 💬❤️</p>", unsafe_allow_html=True)
+
+st.markdown("""
+    <style>
+    .main-container {
+        background: linear-gradient(to bottom right, #e3f2fd, #f3e5f5);
+        border-radius: 15px;
+        padding: 2rem;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    }
+    .question-box {
+        background-color:#1976D2;
+        color:#FFFFFF;
+        padding:10px;
+        border-radius:10px;
+        margin:5px 0;
+        font-size:14px;
+    }
+    .response-box {
+        background-color:#2E7D32;
+        color:#FFFFFF;
+        padding:12px;
+        border-radius:15px;
+        margin-top:15px;
+        font-size:16px;
+    }
+    .emotion-box {
+        color:#FFFFFF;
+        padding:12px;
+        border-left:5px solid #fff;
+        border-radius:8px;
+        font-size:16px;
+        margin-top:15px;
+    }
+    </style>
+""", unsafe_allow_html=True)
+
+st.markdown("""
+<h2 style='text-align: center; color: #3F51B5;'>🤖 Friendly Chatbot & Sentiment Detector</h2>
+<p style='text-align: center; font-size:18px;'>Talk like a friend. I reply & feel your emotion too 💬❤️</p>
+""", unsafe_allow_html=True)
 
 if "history" not in st.session_state:
     st.session_state.history = []
 if "user_questions" not in st.session_state:
     st.session_state.user_questions = []
 
-# ===================
-# 🔄 Layout with Sidebar Chat
-# ===================
 col1, col2 = st.columns([1, 3])
 
 with col1:
@@ -87,20 +122,10 @@ with col1:
     if st.button("🧹 Clear Chat"):
         st.session_state.history = []
         st.session_state.user_questions = []
-        st.rerun()  # ✅ Properly resets session
+        st.rerun()
 
     for question in st.session_state.user_questions:
-        st.markdown(f"""
-            <div style="
-                background-color:#1976D2;
-                color:#FFFFFF;
-                padding:10px;
-                border-radius:10px;
-                margin:5px 0;
-                font-size:14px;">
-                <b>You:</b> {question}
-            </div>
-        """, unsafe_allow_html=True)
+        st.markdown(f"<div class='question-box'><b>You:</b> {question}</div>", unsafe_allow_html=True)
 
 with col2:
     with st.form("chat_form", clear_on_submit=True):
@@ -126,27 +151,13 @@ with col2:
         }
 
         st.markdown(f"""
-            <div style="
-                background-color:{emotion_color_map.get(emotion, '#616161')};
-                color:#FFFFFF;
-                padding:12px;
-                border-left:5px solid #fff;
-                border-radius:8px;
-                font-size:16px;
-                margin-top:15px;">
+            <div class='emotion-box' style="background-color:{emotion_color_map.get(emotion, '#616161')};">
             🔔 <b>Detected Emotion:</b> {emotion.upper()}
             </div>
         """, unsafe_allow_html=True)
 
         st.markdown(f"""
-            <div style="
-                background-color:#2E7D32;
-                color:#FFFFFF;
-                padding:12px;
-                border-radius:15px;
-                margin-top:15px;
-                font-family:'Segoe UI',sans-serif;
-                font-size:16px;">
+            <div class='response-box'>
                 <b>Bot:</b> {bot_reply}
             </div>
         """, unsafe_allow_html=True)
@@ -154,5 +165,5 @@ with col2:
 # =================
 # 🔚 Footer
 # =================
-st.markdown("---")
-st.markdown("<center><small>Made with ❤️ using Streamlit • Chat + Mood Aware</small></center>", unsafe_allow_html=True)
+st.markdown("<hr>", unsafe_allow_html=True)
+st.markdown("<center><small style='color:#555;'>Made with ❤️ using Streamlit • Chat + Mood Aware</small></center>", unsafe_allow_html=True)
