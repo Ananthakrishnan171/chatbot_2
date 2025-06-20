@@ -69,13 +69,12 @@ def get_emotion(user_input):
 # ===================
 # 🎨 Page UI Layout
 # ===================
-st.set_page_config("Fun Chatbot ", layout="wide")
-st.markdown("<h2 style='text-align: center;'>🤖 Friendly Chatbot + Sentiment Detector</h2>", unsafe_allow_html=True)
+st.set_page_config("Tanglish Chatbot with Mood", layout="wide")
+st.markdown("<h2 style='text-align: center;'>🤖 Friendly Chatbot + Mood Detector</h2>", unsafe_allow_html=True)
 st.markdown("<p style='text-align: center;'>Talk like a friend. I reply & feel your emotion too 💬❤️</p>", unsafe_allow_html=True)
 
 if "history" not in st.session_state:
     st.session_state.history = []
-
 if "user_questions" not in st.session_state:
     st.session_state.user_questions = []
 
@@ -86,18 +85,20 @@ col1, col2 = st.columns([1, 3])
 
 with col1:
     st.markdown("<h4>📜 Your Asked Questions</h4>", unsafe_allow_html=True)
-    for msg in st.session_state.user_questions:
+    if st.button("🧹 Clear Chat"):
+        st.session_state.history.clear()
+        st.session_state.user_questions.clear()
+        st.experimental_rerun()
+    for question in st.session_state.user_questions:
         st.markdown(f"""
             <div style="
-                background-color:#263238;
+                background-color:#1E88E5;
                 color:#FFFFFF;
                 padding:10px;
-                border-radius:8px;
-                margin:6px 0;
-                font-size:13px;
-                font-family:Segoe UI;
-            ">
-            👉 {msg}
+                border-radius:10px;
+                margin:5px 0;
+                font-size:14px;">
+                <b>You:</b> {question}
             </div>
         """, unsafe_allow_html=True)
 
@@ -129,8 +130,7 @@ with col2:
                 border-left:5px solid #fff;
                 border-radius:8px;
                 font-size:16px;
-                margin-top:15px;
-            ">
+                margin-top:15px;">
             🔔 <b>Detected Emotion:</b> {emotion.upper()}
             </div>
         """, unsafe_allow_html=True)
@@ -143,9 +143,8 @@ with col2:
                 border-radius:15px;
                 margin-top:15px;
                 font-family:'Segoe UI',sans-serif;
-                font-size:16px;
-            ">
-            <b>Bot:</b> {bot_reply}
+                font-size:16px;">
+                <b>Bot:</b> {bot_reply}
             </div>
         """, unsafe_allow_html=True)
 
