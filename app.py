@@ -44,7 +44,7 @@ else:
     st.stop()
 
 # ========================
-# 🧠 Prediction Functions
+# 🤖 Prediction Functions
 # ========================
 def get_chat_response(user_input):
     user_vec = chat_vectorizer.transform([user_input])
@@ -109,11 +109,35 @@ st.markdown("""
 <p style='text-align: center; font-size:18px;'>Talk like a friend. I reply & feel your emotion too 💬❤️</p>
 """, unsafe_allow_html=True)
 
+# Session state init
 if "history" not in st.session_state:
     st.session_state.history = []
 if "user_questions" not in st.session_state:
     st.session_state.user_questions = []
 
+# Emotion colors
+emotion_color_map = {
+    "happy": "#4CAF50",
+    "sad": "#E53935",
+    "stress": "#FF9800",
+    "emotional": "#9C27B0",
+    "angry": "#F44336",
+    "love": "#EC407A",
+    "depression": "#455A64"
+}
+
+# 🎧 Spotify playlist embed links
+spotify_embed_links = {
+    "happy": "https://open.spotify.com/embed/playlist/37i9dQZF1DXdPec7aLTmlC",
+    "sad": "https://open.spotify.com/embed/playlist/37i9dQZF1DWVrtsSlLKzro",
+    "stress": "https://open.spotify.com/embed/playlist/37i9dQZF1DWUvHZA1zLcjW",
+    "depression": "https://open.spotify.com/embed/playlist/37i9dQZF1DX4sWSpwq3LiO",
+    "love": "https://open.spotify.com/embed/playlist/37i9dQZF1DWYNSm3Z3MxiM",
+    "angry": "https://open.spotify.com/embed/playlist/37i9dQZF1DX1tyCD9QhIWF",
+    "emotional": "https://open.spotify.com/embed/playlist/37i9dQZF1DX7gIoKXt0gmx"
+}
+
+# Layout
 col1, col2 = st.columns([1, 3])
 
 with col1:
@@ -140,16 +164,6 @@ with col2:
         st.session_state.history.append(("Bot", bot_reply))
         st.session_state.user_questions.append(user_input)
 
-        emotion_color_map = {
-            "happy": "#4CAF50",
-            "sad": "#E53935",
-            "stress": "#FF9800",
-            "emotional": "#9C27B0",
-            "angry": "#F44336",
-            "love": "#EC407A",
-            "depression": "#455A64"
-        }
-
         st.markdown(f"""
             <div class='emotion-box' style="background-color:{emotion_color_map.get(emotion, '#616161')};">
             🔔 <b>Detected Emotion:</b> {emotion.upper()}
@@ -162,21 +176,19 @@ with col2:
             </div>
         """, unsafe_allow_html=True)
 
-        # 🎵 Spotify Mapping & Embed
-        spotify_embed_map = {
-            "happy": "https://open.spotify.com/embed/playlist/37i9dQZF1DXdPec7aLTmlC",
-            "sad": "https://open.spotify.com/embed/playlist/37i9dQZF1DX7qK8ma5wgG1",
-            "stress": "https://open.spotify.com/embed/playlist/37i9dQZF1DX3rxVfibe1L0",
-            "emotional": "https://open.spotify.com/embed/playlist/37i9dQZF1DX3YSRoSdA634",
-            "angry": "https://open.spotify.com/embed/playlist/37i9dQZF1DWY5LFcRXkCks",
-            "love": "https://open.spotify.com/embed/playlist/37i9dQZF1DX50QitC6Oqtn",
-            "depression": "https://open.spotify.com/embed/playlist/37i9dQZF1DWVrtsSlLKzro"
-        }
-
-        spotify_url = spotify_embed_map.get(emotion.lower())
+        # 🎧 Embed Spotify based on detected emotion
+        spotify_url = spotify_embed_links.get(emotion)
         if spotify_url:
-            st.markdown("<h5>🎵 Here's a song for your mood:</h5>", unsafe_allow_html=True)
-            st.components.v1.iframe(spotify_url, height=80)
+            st.markdown(f"""
+                <iframe style="border-radius:12px; margin-top:10px;" 
+                        src="{spotify_url}" 
+                        width="100%" 
+                        height="152" 
+                        frameborder="0" 
+                        allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" 
+                        loading="lazy">
+                </iframe>
+            """, unsafe_allow_html=True)
 
 # =================
 # 🔚 Footer
