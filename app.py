@@ -148,7 +148,7 @@ spotify_embed_links = {
     "happy": "https://open.spotify.com/embed/track/3mkPWelCxRQIebt50HB6iH",
     "sad": "https://open.spotify.com/embed/playlist/37i9dQZF1DWVrtsSlLKzro",
     "stress": "https://open.spotify.com/embed/track/2uOBQMz765cr8gnLwPPMv1",
-    "depression": "https://open.spotify.com/embed/track/3eVkn2lYFVq8vZNDR0gf1Z",
+    "depression": "https://open.spotify.com/embed/playlist/4GX1yWidUcdCCuIJZSX4Rc",
     "love": "https://open.spotify.com/embed/playlist/37i9dQZF1DWYNSm3Z3MxiM",
     "angry": "https://open.spotify.com/track/3cC8pKidSDuKF6rAkRNpJT",
     "emotional": "https://open.spotify.com/embed/track/2Osew72vzCf361dtOEF7bB"
