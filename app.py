@@ -69,8 +69,8 @@ def get_emotion(user_input):
 # ===================
 # 🎨 Page UI Layout
 # ===================
-st.set_page_config("Tanglish Chatbot with Mood", layout="wide")
-st.markdown("<h2 style='text-align: center;'>🤖 Friendly Chatbot + Mood Detector</h2>", unsafe_allow_html=True)
+st.set_page_config("Chatbot", layout="wide")
+st.markdown("<h2 style='text-align: center;'>🤖 Friendly Chatbot & Sentiment Detector</h2>", unsafe_allow_html=True)
 st.markdown("<p style='text-align: center;'>Talk like a friend. I reply & feel your emotion too 💬❤️</p>", unsafe_allow_html=True)
 
 if "history" not in st.session_state:
@@ -79,16 +79,19 @@ if "user_questions" not in st.session_state:
     st.session_state.user_questions = []
 
 # ===================
-# 🔄 Layout with Sidebar Chat
+# 🔄 Layout with Sidebar Chat + Clear Option
 # ===================
 col1, col2 = st.columns([1, 3])
 
 with col1:
     st.markdown("<h4>📜 Your Asked Questions</h4>", unsafe_allow_html=True)
-    if st.button("🧹 Clear Chat"):
+
+    if st.button("🧹 Clear Chat History"):
         st.session_state.history.clear()
         st.session_state.user_questions.clear()
+        st.success("✅ Chat history cleared!")
         st.experimental_rerun()
+
     for question in st.session_state.user_questions:
         st.markdown(f"""
             <div style="
@@ -115,16 +118,21 @@ with col2:
         st.session_state.history.append(("Bot", bot_reply))
         st.session_state.user_questions.append(user_input)
 
+        # Color Mapping for Sentiment
         emotion_color_map = {
-            "happy": "#3949AB",
+            "happy": "#43A047",
             "sad": "#D32F2F",
-            "stress": "#F57C00",
-            "emotional": "#7B1FA2",
+            "stress": "#F9A825",
+            "depression": "#5C6BC0",
+            "love": "#EC407A",
+            "angry": "#E53935",
+            "emotional": "#7B1FA2"
         }
 
+        # Emotion Alert Box
         st.markdown(f"""
             <div style="
-                background-color:{emotion_color_map.get(emotion, '#616161')};
+                background-color:{emotion_color_map.get(emotion, '#757575')};
                 color:#FFFFFF;
                 padding:12px;
                 border-left:5px solid #fff;
@@ -135,9 +143,10 @@ with col2:
             </div>
         """, unsafe_allow_html=True)
 
+        # Bot Response Box
         st.markdown(f"""
             <div style="
-                background-color:#43A047;
+                background-color:#1E88E5;
                 color:#FFFFFF;
                 padding:12px;
                 border-radius:15px;
