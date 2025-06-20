@@ -6,6 +6,11 @@ from fuzzywuzzy import process
 import os
 
 # ============================
+# ⚙️ Configs
+# ============================
+MATCH_THRESHOLD = 60  # Fuzzy match threshold (e.g., 60 means 60% similarity)
+
+# ============================
 # 🧠 Load & Train Chatbot Model
 # ============================
 if os.path.exists("Ananth.csv"):
@@ -50,7 +55,7 @@ def get_chat_response(user_input):
     user_vec = chat_vectorizer.transform([user_input])
     pred = chat_model.predict(user_vec)[0]
     match = process.extractOne(user_input.lower(), chat_dict.keys())
-    if match and match[1] >= 70:
+    if match and match[1] >= MATCH_THRESHOLD:
         return chat_dict[match[0]]
     else:
         return pred
@@ -59,7 +64,7 @@ def get_emotion(user_input):
     user_vec = emo_vectorizer.transform([user_input])
     pred = emo_model.predict(user_vec)[0]
     match = process.extractOne(user_input.lower(), emo_dict.keys())
-    if match and match[1] >= 70:
+    if match and match[1] >= MATCH_THRESHOLD:
         return emo_dict[match[0]]
     else:
         return pred
@@ -109,13 +114,17 @@ st.markdown("""
 <p style='text-align: center; font-size:18px;'>Talk like a friend. I reply & feel your emotion too 💬❤️</p>
 """, unsafe_allow_html=True)
 
-# Session state init
+# ======================
+# 🧠 Session State Init
+# ======================
 if "history" not in st.session_state:
     st.session_state.history = []
 if "user_questions" not in st.session_state:
     st.session_state.user_questions = []
 
-# Emotion colors
+# ====================
+# 🎨 Emotion Colors
+# ====================
 emotion_color_map = {
     "happy": "#4CAF50",
     "sad": "#E53935",
@@ -128,7 +137,7 @@ emotion_color_map = {
 
 # 🎧 Spotify playlist embed links
 spotify_embed_links = {
-    "happy":" https://open.spotify.com/embed/track/3mkPWelCxRQIebt50HB6iH",
+    "happy": "https://open.spotify.com/embed/track/3mkPWelCxRQIebt50HB6iH",
     "sad": "https://open.spotify.com/embed/playlist/37i9dQZF1DWVrtsSlLKzro",
     "stress": "https://open.spotify.com/embed/track/2uOBQMz765cr8gnLwPPMv1",
     "depression": "https://open.spotify.com/embed/track/3eVkn2lYFVq8vZNDR0gf1Z",
@@ -137,7 +146,9 @@ spotify_embed_links = {
     "emotional": "https://open.spotify.com/embed/track/2Osew72vzCf361dtOEF7bB"
 }
 
-# Layout
+# =====================
+# 📱 Layout - Chat UI
+# =====================
 col1, col2 = st.columns([1, 3])
 
 with col1:
@@ -176,7 +187,7 @@ with col2:
             </div>
         """, unsafe_allow_html=True)
 
-        # 🎧 Embed Spotify based on detected emotion
+        # 🎧 Embed Spotify player if emotion matched
         spotify_url = spotify_embed_links.get(emotion)
         if spotify_url:
             st.markdown(f"""
