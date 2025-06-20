@@ -8,7 +8,7 @@ import os
 # ============================
 # ⚙️ Configs
 # ============================
-MATCH_THRESHOLD = 60  # Match score threshold (0-100)
+MATCH_THRESHOLD = 75 # Match score threshold (0-100)
 
 # ============================
 # 🧠 Load & Train Chatbot Model
