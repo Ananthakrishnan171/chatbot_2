@@ -69,14 +69,17 @@ def get_emotion(user_input):
 # ===================
 # 🎨 Page UI Layout
 # ===================
-st.set_page_config("Chatbot", layout="wide")
+st.set_page_config(" Chatbot", layout="wide")
 st.markdown("<h2 style='text-align: center;'>🤖 Friendly Chatbot & Sentiment Detector</h2>", unsafe_allow_html=True)
 st.markdown("<p style='text-align: center;'>Talk like a friend. I reply & feel your emotion too 💬❤️</p>", unsafe_allow_html=True)
 
+# Initialize Session State
 if "history" not in st.session_state:
     st.session_state.history = []
 if "user_questions" not in st.session_state:
     st.session_state.user_questions = []
+if "clear_chat" not in st.session_state:
+    st.session_state.clear_chat = False
 
 # ===================
 # 🔄 Layout with Sidebar Chat + Clear Option
@@ -87,9 +90,9 @@ with col1:
     st.markdown("<h4>📜 Your Asked Questions</h4>", unsafe_allow_html=True)
 
     if st.button("🧹 Clear Chat History"):
-        st.session_state.history.clear()
-        st.session_state.user_questions.clear()
-        st.success("✅ Chat history cleared!")
+        st.session_state.history = []
+        st.session_state.user_questions = []
+        st.session_state.clear_chat = True
         st.experimental_rerun()
 
     for question in st.session_state.user_questions:
