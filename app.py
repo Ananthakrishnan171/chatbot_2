@@ -5,9 +5,9 @@ from sklearn.linear_model import LogisticRegression
 from fuzzywuzzy import process
 import os
 
-# ==============================
+# ============================
 # 🧠 Load & Train Chatbot Model
-# ==============================
+# ============================
 if os.path.exists("Ananth.csv"):
     chat_df = pd.read_csv("Ananth.csv")
     chat_X = chat_df['input']
@@ -43,13 +43,12 @@ else:
     st.error("❌ 'friendly_emotion_chatbot.csv' file not found. Please upload the emotion dataset.")
     st.stop()
 
-# =========================
+# ========================
 # 🤖 Prediction Functions
-# =========================
+# ========================
 def get_chat_response(user_input):
     user_vec = chat_vectorizer.transform([user_input])
     pred = chat_model.predict(user_vec)[0]
-
     match = process.extractOne(user_input.lower(), chat_dict.keys())
     if match and match[1] >= 70:
         return chat_dict[match[0]]
@@ -59,7 +58,6 @@ def get_chat_response(user_input):
 def get_emotion(user_input):
     user_vec = emo_vectorizer.transform([user_input])
     pred = emo_model.predict(user_vec)[0]
-
     match = process.extractOne(user_input.lower(), emo_dict.keys())
     if match and match[1] >= 70:
         return emo_dict[match[0]]
@@ -69,36 +67,32 @@ def get_emotion(user_input):
 # ===================
 # 🎨 Page UI Layout
 # ===================
-st.set_page_config(" Chatbot", layout="wide")
-st.markdown("<h2 style='text-align: center;'>🤖 Friendly Chatbot & Sentiment Detector</h2>", unsafe_allow_html=True)
+st.set_page_config("Tanglish Chatbot with Mood", layout="wide")
+st.markdown("<h2 style='text-align: center;'>🤖 Friendly Chatbot + Mood Detector</h2>", unsafe_allow_html=True)
 st.markdown("<p style='text-align: center;'>Talk like a friend. I reply & feel your emotion too 💬❤️</p>", unsafe_allow_html=True)
 
-# Initialize Session State
 if "history" not in st.session_state:
     st.session_state.history = []
 if "user_questions" not in st.session_state:
     st.session_state.user_questions = []
-if "clear_chat" not in st.session_state:
-    st.session_state.clear_chat = False
 
 # ===================
-# 🔄 Layout with Sidebar Chat + Clear Option
+# 🔄 Layout with Sidebar Chat
 # ===================
 col1, col2 = st.columns([1, 3])
 
 with col1:
     st.markdown("<h4>📜 Your Asked Questions</h4>", unsafe_allow_html=True)
 
-    if st.button("🧹 Clear Chat History"):
+    if st.button("🧹 Clear Chat"):
         st.session_state.history = []
         st.session_state.user_questions = []
-        st.session_state.clear_chat = True
-        st.experimental_rerun()
+        st.rerun()  # ✅ Properly resets session
 
     for question in st.session_state.user_questions:
         st.markdown(f"""
             <div style="
-                background-color:#1E88E5;
+                background-color:#1976D2;
                 color:#FFFFFF;
                 padding:10px;
                 border-radius:10px;
@@ -121,21 +115,19 @@ with col2:
         st.session_state.history.append(("Bot", bot_reply))
         st.session_state.user_questions.append(user_input)
 
-        # Color Mapping for Sentiment
         emotion_color_map = {
-            "happy": "#43A047",
-            "sad": "#D32F2F",
-            "stress": "#F9A825",
-            "depression": "#5C6BC0",
+            "happy": "#4CAF50",
+            "sad": "#E53935",
+            "stress": "#FF9800",
+            "emotional": "#9C27B0",
+            "angry": "#F44336",
             "love": "#EC407A",
-            "angry": "#E53935",
-            "emotional": "#7B1FA2"
+            "depression": "#455A64"
         }
 
-        # Emotion Alert Box
         st.markdown(f"""
             <div style="
-                background-color:{emotion_color_map.get(emotion, '#757575')};
+                background-color:{emotion_color_map.get(emotion, '#616161')};
                 color:#FFFFFF;
                 padding:12px;
                 border-left:5px solid #fff;
@@ -146,10 +138,9 @@ with col2:
             </div>
         """, unsafe_allow_html=True)
 
-        # Bot Response Box
         st.markdown(f"""
             <div style="
-                background-color:#1E88E5;
+                background-color:#2E7D32;
                 color:#FFFFFF;
                 padding:12px;
                 border-radius:15px;
@@ -160,8 +151,8 @@ with col2:
             </div>
         """, unsafe_allow_html=True)
 
-# =============
+# =================
 # 🔚 Footer
-# =============
+# =================
 st.markdown("---")
-st.markdown("<center><small>Made with ❤️ using Streamlit • Chat & Mood Aware</small></center>", unsafe_allow_html=True)
+st.markdown("<center><small>Made with ❤️ using Streamlit • Chat + Mood Aware</small></center>", unsafe_allow_html=True)
