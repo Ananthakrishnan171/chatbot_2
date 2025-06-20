@@ -67,8 +67,8 @@ def get_emotion(user_input):
 # ===================
 # 🎨 Page UI Layout
 # ===================
-st.set_page_config("Tanglish Chatbot with Mood", layout="wide")
-st.markdown("<h2 style='text-align: center;'>🤖 Friendly Chatbot + Mood Detector</h2>", unsafe_allow_html=True)
+st.set_page_config("Chatbot", layout="wide")
+st.markdown("<h2 style='text-align: center;'>🤖 Friendly Chatbot & Sentiment Detector</h2>", unsafe_allow_html=True)
 st.markdown("<p style='text-align: center;'>Talk like a friend. I reply & feel your emotion too 💬❤️</p>", unsafe_allow_html=True)
 
 if "history" not in st.session_state:
@@ -104,7 +104,7 @@ with col1:
 
 with col2:
     with st.form("chat_form", clear_on_submit=True):
-        user_input = st.text_input("💬 Type your message:", placeholder="Ex: enna panra da...")
+        user_input = st.text_input("💬 Type your message:", placeholder="Yedhachum Pesu Daa")
         submitted = st.form_submit_button("Send")
 
     if submitted and user_input:
