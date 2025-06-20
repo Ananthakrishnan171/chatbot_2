@@ -128,7 +128,7 @@ emotion_color_map = {
 
 # 🎧 Spotify playlist embed links
 spotify_embed_links = {
-    "happy": "https://open.spotify.com/embed/playlist/6MZtZRdQUSaIO6eELQxAcy?utm_source=generator",
+    "happy":" https://open.spotify.com/embed/track/3mkPWelCxRQIebt50HB6iH",
     "sad": "https://open.spotify.com/embed/playlist/37i9dQZF1DWVrtsSlLKzro",
     "stress": "https://open.spotify.com/embed/playlist/37i9dQZF1DWUvHZA1zLcjW",
     "depression": "https://open.spotify.com/embed/playlist/37i9dQZF1DX4sWSpwq3LiO",
